@@ -1,21 +1,10 @@
 // Package goredis is a client for the redis and ledisdb.
 //
-// Config
-//
-// Config struct contains configuration for ledisdb:
-//
-//     Addr            ledisdb server address, like 127.0.0.1:6380
-//     MaxIdleConns    max idle connections for ledisdb
-//
 // Client
 //
-// The client is the primary interface for ledisdb. You must first create a client with proper config for working.
+// The client is the primary interface for redis. You must first create a client with redis address for working.
 //
-//     cfg := new(Config)
-//     cfg.Addr = "127.0.0.1:6380"
-//     cfg.MaxIdleConns = 4
-//
-//     c := NewClient(cfg)
+//     c := NewClient("127.0.0.1:6380")
 //
 // The most important function for client is Do function to send commands to remote server.
 //
@@ -30,7 +19,7 @@
 // You can use an independent connection to send commands.
 //
 //     //get a connection
-//     conn := c.Get()
+//     conn, _ := c.Get()
 //
 //     //connection send command
 //     conn.Do("ping")
