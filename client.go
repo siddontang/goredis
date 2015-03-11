@@ -23,6 +23,7 @@ type Client struct {
 	maxIdleConns    int
 	readBufferSize  int
 	writeBufferSize int
+	password        string
 
 	conns *list.List
 }
@@ -35,17 +36,22 @@ func getProto(addr string) string {
 	}
 }
 
-func NewClient(addr string) *Client {
+func NewClient(addr string, password string) *Client {
 	c := new(Client)
 
 	c.addr = addr
 	c.maxIdleConns = 4
 	c.readBufferSize = 1024
 	c.writeBufferSize = 1024
+	c.password = password
 
 	c.conns = list.New()
 
 	return c
+}
+
+func (c *Client) SetPassword(pass string) {
+	c.password = pass
 }
 
 func (c *Client) SetReadBufferSize(s int) {
@@ -118,7 +124,7 @@ func (c *Client) get() (co *Conn, err error) {
 	if c.conns.Len() == 0 {
 		c.Unlock()
 
-		co, err = c.newConn(c.addr)
+		co, err = c.newConn(c.addr, c.password)
 	} else {
 		e := c.conns.Front()
 		co = e.Value.(*Conn)

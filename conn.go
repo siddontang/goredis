@@ -361,10 +361,18 @@ func (c *Conn) readReply() (interface{}, error) {
 	return nil, errors.New("unexpected response line")
 }
 
-func (c *Client) newConn(addr string) (*Conn, error) {
+func (c *Client) newConn(addr string, pass string) (*Conn, error) {
 	co, err := ConnectWithSize(addr, c.readBufferSize, c.writeBufferSize)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(pass) > 0 {
+		_, err = co.Do("AUTH", pass)
+		if err != nil {
+			co.Close()
+			return nil, err
+		}
 	}
 
 	return co, nil

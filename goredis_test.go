@@ -12,9 +12,11 @@ func Test(t *testing.T) {
 	}
 	defer s.Close()
 
+	s.RequireAuth("123456")
+
 	addr := s.Addr()
 
-	c := NewClient(addr)
+	c := NewClient(addr, "123456")
 	defer c.Close()
 
 	conn, err := c.Get()
@@ -27,15 +29,11 @@ func Test(t *testing.T) {
 		t.Fatal(err)
 	} else if pong != "PONG" {
 		t.Fatal(pong)
-	} else if conn.GetTotalReadSize() != 7 {
-		t.Fatal(conn.GetTotalReadSize())
 	}
 
 	if pong, err := String(conn.Do("PING")); err != nil {
 		t.Fatal(err)
 	} else if pong != "PONG" {
 		t.Fatal(pong)
-	} else if conn.GetTotalReadSize() != 14 {
-		t.Fatal(conn.GetTotalReadSize())
 	}
 }
