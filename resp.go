@@ -302,10 +302,20 @@ func (resp *RespWriter) WriteInteger(n int64) error {
 	return resp.writeTerm()
 }
 
+func (resp *RespWriter) FlushInteger(n int64) error {
+	resp.WriteInteger(n)
+	return resp.Flush()
+}
+
 func (resp *RespWriter) WriteString(s string) error {
 	resp.bw.WriteByte('+')
 	resp.bw.WriteString(s)
 	return resp.writeTerm()
+}
+
+func (resp *RespWriter) FlushString(s string) error {
+	resp.WriteString(s)
+	return resp.Flush()
 }
 
 func (resp *RespWriter) WriteError(e error) error {
@@ -320,6 +330,11 @@ func (resp *RespWriter) WriteError(e error) error {
 	return resp.writeTerm()
 }
 
+func (resp *RespWriter) FlushError(e error) error {
+	resp.WriteError(e)
+	return resp.Flush()
+}
+
 func (resp *RespWriter) WriteBulk(b []byte) error {
 	resp.bw.WriteByte('$')
 	if b == nil {
@@ -330,6 +345,11 @@ func (resp *RespWriter) WriteBulk(b []byte) error {
 		resp.bw.Write(b)
 	}
 	return resp.writeTerm()
+}
+
+func (resp *RespWriter) FlushBulk(b []byte) error {
+	resp.WriteBulk(b)
+	return resp.Flush()
 }
 
 func (resp *RespWriter) WriteArray(ay []interface{}) error {
@@ -366,6 +386,11 @@ func (resp *RespWriter) WriteArray(ay []interface{}) error {
 		}
 		return err
 	}
+}
+
+func (resp *RespWriter) FlushArray(ay []interface{}) error {
+	resp.WriteArray(ay)
+	return resp.Flush()
 }
 
 func (resp *RespWriter) writeBulkString(s string) error {
