@@ -84,12 +84,12 @@ func (c *Conn) GetTotalWriteSize() int64 {
 	return int64(c.totalWriteSize)
 }
 
-func (c *Conn) SetReadDeadline(t time.Time) {
-	c.c.SetReadDeadline(t)
+func (c *Conn) SetReadDeadline(t time.Time) error {
+	return c.c.SetReadDeadline(t)
 }
 
-func (c *Conn) SetWriteDeadline(t time.Time) {
-	c.c.SetWriteDeadline(t)
+func (c *Conn) SetWriteDeadline(t time.Time) error {
+	return c.c.SetWriteDeadline(t)
 }
 
 // Send RESP command and receive the reply
