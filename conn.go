@@ -92,6 +92,14 @@ func (c *Conn) SetWriteDeadline(t time.Time) error {
 	return c.c.SetWriteDeadline(t)
 }
 
+func (c *Conn) RemoteAddr() net.Addr {
+	return c.c.RemoteAddr()
+}
+
+func (c *Conn) LocalAddr() net.Addr {
+	return c.c.LocalAddr()
+}
+
 // Send RESP command and receive the reply
 func (c *Conn) Do(cmd string, args ...interface{}) (interface{}, error) {
 	if err := c.Send(cmd, args...); err != nil {
