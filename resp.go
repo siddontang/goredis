@@ -286,7 +286,7 @@ func (resp *RespWriter) writeTerm() error {
 
 func (resp *RespWriter) writeInteger(n int64) error {
 	var err error
-	if n < int64(len(intBuffer)) {
+	if n >= 0 && n < int64(len(intBuffer)) {
 		_, err = resp.bw.Write(intBuffer[n])
 	} else {
 		_, err = resp.bw.Write(strconv.AppendInt(nil, n, 10))
